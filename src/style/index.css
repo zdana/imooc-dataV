@@ -1,0 +1,8 @@
+.echarts{
+  height: 100%;
+  width: 100%;
+}
+.el-card__header{
+  border-bottom: none;
+  padding: 0;
+}
