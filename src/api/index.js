@@ -1,7 +1,7 @@
 import request from '../utils/request'
 
 // 具体地址
-export function wordcloud(){
+export function wordCloud(){
   return request({
     url:'/screen/wordcloud',
     // get请求

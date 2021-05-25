@@ -1,5 +1,5 @@
 <template>
-  <div class="buttom-view">
+  <div class="bottom-view">
     <div class="view">
       <el-card shadow="hover">
         <template v-slot:header>
@@ -10,24 +10,30 @@
             <div class="chart-inner">
               <div class="chart">
                 <div class="chart-title">搜索用户数</div>
-                <div class="chart-data">193,734</div>
+                <div class="chart-data">{{userCount }}</div>
                 <v-chart :options="searchUserOption" />
               </div>
               <div class="chart">
                 <div class="chart-title">搜索量</div>
-                <div class="chart-data">93,634</div>
-                <v-chart :options="searchUserOption" />
+                <div class="chart-data">{{searchCount}}</div>
+                <v-chart :options="searchNumberOption" />
               </div>
             </div>
             <div class="table-wrapper">
               <el-table :data="tableData">
-                <el-table-column prop="rank" label="排名" width="180" />
-                <el-table-column prop="keyword" label="关键词" width="180" />
-                <el-table-column prop="count" label="总搜索量" width="180" />
-                <el-table-column prop="users" label="搜索用户数" width="180" />
+                <el-table-column prop="rank" label="排名" />
+                <el-table-column prop="keyword" label="关键词" />
+                <el-table-column prop="count" label="总搜索量" />
+                <el-table-column prop="users" label="搜索用户数" />
+                <el-table-column prop="range" label="搜索占比" />
               </el-table>
-              <el-pagination layout="prev,pager,next" :total="100" :page-size="4" background=""
-                @current-change="onPageChange" />
+              <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                background
+                @current-change="onPageChange"
+              />
             </div>
           </div>
         </template>
@@ -39,7 +45,7 @@
           <div class="title-wrapper">
             <div class="title">分类销售排行</div>
             <div class="radio-wrapper">
-              <el-radio-group v-model="radioSelect" size="small">
+              <el-radio-group v-model="radioSelect" size="small" @change="onCategoryChange">
                 <el-radio-button label="品类"></el-radio-button>
                 <el-radio-button label="商品"></el-radio-button>
               </el-radio-group>
@@ -48,30 +54,34 @@
         </template>
         <template>
           <div class="chart-wrapper">
-            <v-chart :options="categoryOptions"></v-chart>
+            <v-chart :options="categoryOptions" />
           </div>
         </template>
       </el-card>
     </div>
   </div>
 </template>
+
 <script>
-  import commonDataMixin from "../../mixins/commonDataMixin";
+  import commonDataMixin from '../../mixins/commonDataMixin'
+
+  const colors = ['#8d7fec', '#5085f2', '#f8726b', '#e7e702', '#78f283', '#4bc1fc']
+
   export default {
     mixins: [commonDataMixin],
     data() {
       return {
-        tableData: [],
-        totalData: [],
         searchUserOption: {},
         searchNumberOption: {},
+        tableData: [],
+        totalData: [],
         total: 0,
         pageSize: 4,
         userCount: 0,
         searchCount: 0,
-        radioSelect: "品类",
-        categoryOptions: {},
-      };
+        radioSelect: '品类',
+        categoryOptions: {}
+      }
     },
     methods: {
       onCategoryChange(type) {
@@ -79,9 +89,10 @@
         this.renderPieChart()
       },
       onPageChange(page) {
-        console.log(page);
+        this.renderTable(page)
       },
       renderPieChart() {
+        console.log(this.category1.data1);
         if (!this.category1.data1 || !this.category2.data1) {
           return
         }
@@ -185,6 +196,7 @@
         }
       },
       renderTable(page) {
+        // 数值分页
         this.tableData = this.totalData.slice(
           (page - 1) * this.pageSize,
           (page - 1) * this.pageSize + this.pageSize
@@ -233,9 +245,9 @@
       }
     },
     mounted() {
-      this.renderPieChart();
+      this.renderPieChart()
     },
-    watch:{
+    watch: {
       wordCloud() {
         const totalData = []
         this.wordCloud.forEach((item, index) => {
@@ -248,26 +260,32 @@
             range: `${((item.user / item.count) * 100).toFixed(2)}%`
           })
         })
+        // console.log(this.wordCloud)
         this.totalData = totalData
         this.total = this.totalData.length
         this.renderTable(1)
-        this.userCount = totalData.reduce((s, i) => i.users + s, 0)
-        this.searchCount = totalData.reduce((s, i) => i.count + s, 0)
+        // reduce需要传入两个值，第一个是累加的值，第二个是起始值
+        // 改成千分位的方法：过滤器的方法只限于vue2版本，vue3不再支持
+        this.userCount = this.format(totalData.reduce((s, i) => i.users + s, 0))
+        this.searchCount = this.format(totalData.reduce((s, i) => i.count + s, 0))
         this.renderLineChart()
       },
       category1() {
         this.renderPieChart()
       }
     }
-  };
+  }
 </script>
+
 <style lang="scss" scoped>
-  .buttom-view {
+  .bottom-view {
     display: flex;
     margin-top: 20px;
 
     .view {
       flex: 1;
+      width: 50%;
+      box-sizing: border-box;
 
       &:first-child {
         padding: 0 10px 0 0;
@@ -303,7 +321,7 @@
         .chart-inner {
           display: flex;
           padding: 0 10px;
-          margin-top: 20xp;
+          margin-top: 20px;
 
           .chart {
             flex: 1;

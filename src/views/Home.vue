@@ -12,7 +12,7 @@
   import SaleView from '../components/SaleView'
   import ButtomView from '../components/ButtomView'
   import MapView from '../components/MapView'
-  import { wordcloud, mapScatter, screenData } from '../api'
+  import { wordCloud, mapScatter, screenData } from '../api'
   export default {
     name: 'Home',
     components: {
@@ -29,7 +29,7 @@
       }
     },
     methods:{
-      // 对reportData数据进行处理
+      // 
       getReportData(){
         return this.reportData
       },
@@ -44,14 +44,14 @@
     provide(){
       return{
         getReportData:this.getReportData,
-        wordCloud:this.getWordCloud,
+        getWordCloud:this.getWordCloud,
         mapData:this.getMapData
       }
     },
     mounted() {
       // 调用接口，接收api中传过来的数据
       screenData().then(data => this.reportData = data),
-      wordcloud().then(data => this.wordCloud = data),
+      wordCloud().then(data => this.wordCloud = data),
       mapScatter().then(data => this.mapData = data)
     }
   }

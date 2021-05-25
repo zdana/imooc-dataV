@@ -10,7 +10,7 @@ function wrapperNumber(o, k) {
 // 处理百分数数据
 function wrapperPercentage(o, k) {
   return o && o[k] ? `${o[k]}%` : '0%'
-}
+}  
 // 处理金额数据
 function wrapperMoney(o, k) {
   return o && o[k] ? `￥${format(o[k])}` : '￥ 0.00'
@@ -18,6 +18,18 @@ function wrapperMoney(o, k) {
 function wrapperOriginalNumber(o, k) {
   return o && o[k] ? o[k] : 0
 }
+function wrapperObject(o,k){
+  if(o && k.indexOf('.')>=0){
+    const keys=k.split('.')
+    keys.forEach(key=>{
+      o=o[key]
+    })
+    return o
+  }else{
+    return o && o[k]?o[k]:{}
+  }
+}
+
 function wrapperArray(o, k) {
   return o && o[k] ? o[k] : []
 }
@@ -97,6 +109,18 @@ export default {
     },
     wordCloud(){
       return this.getWordCloud()
+    },
+    category1(){
+      return wrapperObject(this.reportData,'category.data1')
+    },
+    category2(){
+      return wrapperObject(this.reportData,'category.data2')
+
+    }
+  },
+  methods:{
+    format(v){
+      return format(v)
     }
   },
   inject: ['getReportData','getWordCloud']
