@@ -92,7 +92,6 @@
         this.renderTable(page)
       },
       renderPieChart() {
-        console.log(this.category1.data1);
         if (!this.category1.data1 || !this.category2.data1) {
           return
         }
@@ -260,7 +259,6 @@
             range: `${((item.user / item.count) * 100).toFixed(2)}%`
           })
         })
-        // console.log(this.wordCloud)
         this.totalData = totalData
         this.total = this.totalData.length
         this.renderTable(1)

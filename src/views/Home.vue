@@ -31,12 +31,14 @@
     methods:{
       // 
       getReportData(){
+        // console.log(this.reportData);
         return this.reportData
       },
       getWordCloud(){
         return this.wordCloud
       },
       getMapData(){
+        // console.log(this.mapData);
         return this.mapData
       }
     },
@@ -45,7 +47,7 @@
       return{
         getReportData:this.getReportData,
         getWordCloud:this.getWordCloud,
-        mapData:this.getMapData
+        getMapData:this.getMapData
       }
     },
     mounted() {

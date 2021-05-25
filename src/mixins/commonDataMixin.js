@@ -115,7 +115,9 @@ export default {
     },
     category2(){
       return wrapperObject(this.reportData,'category.data2')
-
+    },
+    mapData(){
+      return this.getMapData()
     }
   },
   methods:{
@@ -123,5 +125,5 @@ export default {
       return format(v)
     }
   },
-  inject: ['getReportData','getWordCloud']
+  inject: ['getReportData','getWordCloud','getMapData']
 }

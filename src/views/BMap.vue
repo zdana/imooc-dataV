@@ -403,7 +403,6 @@ const converData=function(){
   })
   return res
 }
-// console.log(converData(data));
 export default {
   name: "BMap",
   components: {},
